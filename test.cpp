@@ -12,10 +12,8 @@ using namespace std;
 using namespace cv;
 using namespace std::chrono;
 
-// ===== ✅ Update your username here =====
 string attendanceFilePath = "C:/Users/HP/Desktop/attendance_log.csv";
 
-// Function to get current timestamp
 string getCurrentTimestamp() {
     auto now = system_clock::now();
     time_t timeNow = system_clock::to_time_t(now);
@@ -24,17 +22,16 @@ string getCurrentTimestamp() {
     return string(buf);
 }
 
-// Function to log attendance
 void logAttendance(const string& name) {
     cout << "[DEBUG] Attempting to write to: " << attendanceFilePath << endl;
     ofstream file(attendanceFilePath, ios::app);
     if (file.is_open()) {
         file << name << "," << getCurrentTimestamp() << endl;
-        cout << "✅ Logged attendance for: " << name << endl;
+        cout << "Logged attendance for: " << name << endl;
         file.close();
     }
     else {
-        cerr << "❌ ERROR: Unable to write to file: " << attendanceFilePath << endl;
+        cerr << "ERROR: Unable to write to file: " << attendanceFilePath << endl;
         MessageBox(NULL, L"Unable to write to attendance_log.csv. Please check the path.", L"File Write Error", MB_OK | MB_ICONERROR);
     }
 }
@@ -44,7 +41,6 @@ void main() {
     CascadeClassifier facedetect;
     Mat img;
 
-    // Load Haar cascade for face detection
     if (!facedetect.load("haarcascade_frontalface_default.xml")) {
         cerr << "❌ ERROR: Haar cascade not found.\n";
         return;
@@ -63,7 +59,6 @@ void main() {
             Rect faceROI = faces[i];
             rectangle(img, faceROI.tl(), faceROI.br(), Scalar(50, 50, 255), 3);
 
-            // Assign temporary name for each face
             string name = "Person" + to_string(i);
             logAttendance(name);
 
